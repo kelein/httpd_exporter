@@ -26,6 +26,7 @@ var (
 	insecure        = flag.Bool("insecure", true, "Ignore server certificate if using https")
 )
 
+// Exporter for apache server status
 type Exporter struct {
 	URI               string
 	mutex             sync.RWMutex
@@ -43,6 +44,7 @@ type Exporter struct {
 	scrapeFailures    prometheus.Counter
 }
 
+// NewApacheExporter create a exporter instance
 func NewApacheExporter(uri string) *Exporter {
 	return &Exporter{
 		URI: uri,
@@ -113,6 +115,7 @@ func NewApacheExporter(uri string) *Exporter {
 	}
 }
 
+// Describe implements prometheus Collector's Describe method
 func (e *Exporter) Describe(ch chan<- *prometheus.Desc) {
 	e.version.Describe(ch)
 	e.totalKBytes.Describe(ch)
@@ -210,31 +213,32 @@ func (e *Exporter) scrapeBasic(ch chan<- prometheus.Metric) error {
 		}
 	}
 
-	total_access, _ := strconv.ParseFloat(TotalAccesses, 64)
-	total_kbytes, _ := strconv.ParseFloat(TotalKBytes, 64)
-	cpu_load, _ := strconv.ParseFloat(CPULoad, 64)
-	server_uptime, _ := strconv.ParseFloat(Uptime, 64)
-	req_per_sec, _ := strconv.ParseFloat(ReqPerSec, 64)
-	byte_per_sec, _ := strconv.ParseFloat(BytesPerSec, 64)
-	byte_per_req, _ := strconv.ParseFloat(BytesPerReq, 64)
-	busy_workers, _ := strconv.ParseFloat(BusyWorkers, 64)
-	idle_workers, _ := strconv.ParseFloat(IdleWorkers, 64)
-	total_processes := busy_workers + idle_workers
+	totalAccess, _ := strconv.ParseFloat(TotalAccesses, 64)
+	totalKBytes, _ := strconv.ParseFloat(TotalKBytes, 64)
+	cpuLoad, _ := strconv.ParseFloat(CPULoad, 64)
+	serverUptime, _ := strconv.ParseFloat(Uptime, 64)
+	reqPerSec, _ := strconv.ParseFloat(ReqPerSec, 64)
+	bytePerSec, _ := strconv.ParseFloat(BytesPerSec, 64)
+	bytesPerReq, _ := strconv.ParseFloat(BytesPerReq, 64)
+	busyWorkers, _ := strconv.ParseFloat(BusyWorkers, 64)
+	idleWorkers, _ := strconv.ParseFloat(IdleWorkers, 64)
+	totalProcesses := busyWorkers + idleWorkers
 
-	e.totalAccesses.Set(float64(total_access))
-	e.totalKBytes.Set(float64(total_kbytes))
-	e.cpuLoad.Set(float64(cpu_load))
-	e.serverUptime.Set(float64(server_uptime))
-	e.requestsPerSecond.Set(float64(req_per_sec))
-	e.bytesPerSecond.Set(float64(byte_per_sec))
-	e.bytesPerRequest.Set(float64(byte_per_req))
-	e.totalProcesses.Set(float64(total_processes))
-	e.totalWorkers.WithLabelValues("busy").Set(float64(busy_workers))
-	e.totalWorkers.WithLabelValues("idle").Set(float64(idle_workers))
+	e.totalAccesses.Set(float64(totalAccess))
+	e.totalKBytes.Set(float64(totalKBytes))
+	e.cpuLoad.Set(float64(cpuLoad))
+	e.serverUptime.Set(float64(serverUptime))
+	e.requestsPerSecond.Set(float64(reqPerSec))
+	e.bytesPerSecond.Set(float64(bytePerSec))
+	e.bytesPerRequest.Set(float64(bytesPerReq))
+	e.totalProcesses.Set(float64(totalProcesses))
+	e.totalWorkers.WithLabelValues("busy").Set(float64(busyWorkers))
+	e.totalWorkers.WithLabelValues("idle").Set(float64(idleWorkers))
 
 	return nil
 }
 
+// Collect implements prometheus Collector's Collect method
 func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 	e.mutex.Lock()
 	defer e.mutex.Unlock()

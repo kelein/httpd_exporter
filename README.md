@@ -34,7 +34,7 @@ Usage of ./apache_exporter:
 $ ./apache_exporter -scrape_uri http://localhost/server-status/ -telemetry.address :9113
 ```
 
-## Metrics 
+## Metrics
 
 | Metric	        | Type  | Descriptions  |
 |:------------------|:------|:--------------|
