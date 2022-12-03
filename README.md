@@ -9,6 +9,17 @@ consumption.
 
 - [Enable Apache server-status](https://unix.stackexchange.com/questions/153915/enable-server-status-on-my-web-server)
 
+```toml
+# Server Status Location Config
+<Location /server-status>
+   SetHandler server-status
+   Order deny,allow
+   Deny from all
+   Allow from all
+</Location>
+```
+
+> A whole httpd config at: [httpd.conf](./httpd.conf)
 
 ## Usage
 
@@ -17,26 +28,27 @@ $ ./apache_exporter -h
 
 Usage of ./apache_exporter:
   -insecure
-    	Ignore server certificate if using https (default true)
+     Ignore server certificate if using https (default true)
   -log.level value
-    	Only log messages with the given severity or above.
-	Valid levels: [debug, info, warn, error, fatal, panic].
+     Only log messages with the given severity or above.
+ Valid levels: [debug, info, warn, error, fatal, panic].
   -scrape_uri string
-    	URI to apache server status page. (default "http://localhost/server-status")
+     URI to apache server status page. (default "http://localhost/server-status")
   -telemetry.address string
-    	Address on which to expose metrics. (default ":9113")
+     Address on which to expose metrics. (default ":9113")
   -telemetry.endpoint string
-    	Path under which to expose metrics. (default "/metrics")
+     Path under which to expose metrics. (default "/metrics")
 ```
 
 > e.g:
+
 ```
-$ ./apache_exporter -scrape_uri http://localhost/server-status/ -telemetry.address :9113
+./apache_exporter -scrape_uri http://localhost/server-status/ -telemetry.address :9113
 ```
 
 ## Metrics
 
-| Metric	        | Type  | Descriptions  |
+| Metric         | Type  | Descriptions  |
 |:------------------|:------|:--------------|
 | apache_cpu_load | gauge | CPU Load in % |
 | apache_cpu_usage_system | gauge | CPU Usage (System) |
