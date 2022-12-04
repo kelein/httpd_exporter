@@ -9,7 +9,7 @@ consumption.
 
 - [Enable Apache server-status](https://unix.stackexchange.com/questions/153915/enable-server-status-on-my-web-server)
 
-```toml
+```rust
 # Server Status Location Config
 <Location /server-status>
    SetHandler server-status
