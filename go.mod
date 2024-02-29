@@ -3,7 +3,7 @@ module github.com/kelein/httpd_exporter
 go 1.18
 
 require (
-	github.com/PuerkitoBio/goquery v1.9.0
+	github.com/PuerkitoBio/goquery v1.9.1
 	github.com/prometheus/client_golang v1.19.0
 	github.com/prometheus/log v0.0.0-20151026012452-9a3136781e1f
 )
